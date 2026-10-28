@@ -98,12 +98,6 @@ class OpenAIProvider(LLMProvider):
         # client that only lives for the duration of one attribute lookup can
         # be torn down before the request goes out.
         client = self._client()
-        # Fork patch (akkodis-cloud-team): Azure-hosted reasoning models
-        # (gpt-5.x, o-series) reject `max_tokens` — they require
-        # `max_completion_tokens` — and reject any `temperature` other than
-        # the model default. Send the modern parameter and omit temperature
-        # entirely; the `temperature` setting in `.genai-review.yml` is
-        # therefore not applied with this fork.
         response = client.chat.completions.create(
             model=self.model,
             messages=[
